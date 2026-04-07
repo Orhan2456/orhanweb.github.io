@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Arama Geçmişi(BETA)</title>
+
+<style>
+/* Sayfa genel */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f6fa;
+  margin: 0;
+  padding: 20px;
+}
+
+/* Başlık */
+h2 {
+  text-align: center;
+  color: #2f3640;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+/* Liste alanı */
+#list {
+  width: 500px;
+  margin: 20px auto;
+}
+
+/* Her kayıt satırı */
+#list div {
+  background-color: #ffffff;
+  border: 1px solid #dcdde1;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Hover efekti */
+#list div:hover {
+  background-color: #f1f2f6;
+}
+
+/* Tekli sil butonu */
+#list button {
+  background-color: #e84118;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#list button:hover {
+  background-color: #c23616;
+}
+
+/* Hepsini sil butonu */
+body > button {
+  display: block;
+  margin: 20px auto;
+  background-color: #273c75;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+body > button:hover {
+  background-color: #192a56;
+}
+</style>
+
+</head>
+<body>
+
+<h2>Arama Geçmişi</h2>
+
+<div id="list"></div>
+
+<button onclick="clearData()">Hepsini Sil</button>
+
+<script>
+function loadData() {
+  let data = JSON.parse(localStorage.getItem("searchData")) || [];
+  let list = document.getElementById("list");
+
+  list.innerHTML = "";
+
+  data.forEach((item, index) => {
+    let div = document.createElement("div");
+    div.textContent = item + " ";
+
+    // Tek tek silme butonu
+    let btn = document.createElement("button");
+    btn.textContent = "Sil";
+    btn.onclick = () => deleteItem(index);
+
+    div.appendChild(btn);
+    list.appendChild(div);
+  });
+}
+
+function deleteItem(index) {
+  let data = JSON.parse(localStorage.getItem("searchData")) || [];
+  data.splice(index, 1);
+
+  localStorage.setItem("searchData", JSON.stringify(data));
+  loadData();
+}
+
+function clearData() {
+  localStorage.removeItem("searchData");
+  loadData();
+}
+
+loadData();
+</script>
+
+</body>
+</html>

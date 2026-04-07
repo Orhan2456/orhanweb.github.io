@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Döviz Kurları</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f4f8;
+      color: #111827;
+      text-align: center;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #38bdf8;
+    }
+
+    table {
+      margin: 20px auto;
+      border-collapse: collapse;
+      width: 80%;
+      max-width: 600px;
+      background: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background: #38bdf8;
+      color: white;
+    }
+
+    tr:hover {
+      background: #f1f5f9;
+    }
+
+    #lastUpdated {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #64748b;
+    }
+
+    button {
+      padding: 10px 15px;
+      background: #38bdf8;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #0ea5e9;
+    }
+  </style>
+</head>
+<body>
+  <h1>Döviz Kurları</h1>
+  <button onclick="getRates()">Güncelle</button>
+  <table id="ratesTable">
+    <thead>
+      <tr>
+        <th>Para Birimi</th>
+        <th>Kod</th>
+        <th>Kur (TRY)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td colspan="3">Yükleniyor...</td></tr>
+    </tbody>
+  </table>
+  <div id="lastUpdated"></div>
+
+  <script>
+    async function getRates() {
+      const tbody = document.querySelector("#ratesTable tbody");
+      const lastUpdatedDiv = document.getElementById("lastUpdated");
+      tbody.innerHTML = "<tr><td colspan='3'>Yükleniyor...</td></tr>";
+
+      try {
+        const res = await fetch("https://api.exchangerate-api.com/v4/latest/TRY");
+        const data = await res.json();
+        const rates = data.rates;
+
+        // Gösterilecek para birimleri
+        const currencies = ["USD","EUR","GBP","JPY","CHF","AUD","CAD"];
+
+        tbody.innerHTML = "";
+        currencies.forEach(code => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${code}</td>
+            <td>${code}</td>
+            <td>${rates[code].toFixed(4)}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        lastUpdatedDiv.innerText = "Güncelleme: " + new Date().toLocaleString();
+
+      } catch (err) {
+        tbody.innerHTML = "<tr><td colspan='3'>Hata oluştu</td></tr>";
+        lastUpdatedDiv.innerText = "";
+        console.error(err);
+      }
+    }
+
+    // Sayfa açıldığında kurları getir
+    getRates();
+  </script>
+</body>
+</html>

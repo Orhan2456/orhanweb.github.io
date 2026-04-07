@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orhan WEB</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f4f4f4;
+}
+
+/* NAVBAR */
+.navbar {
+    background: #111;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 30px;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.menu button {
+    background: none;
+    border: none;
+    color: white;
+    margin-left: 15px;
+    cursor: pointer;
+}
+
+/* MANŞET */
+.hero {
+    height: 300px;
+    display: flex;
+    align-items: flex-end;
+    padding: 20px;
+    color: white;
+    background-size: cover;
+    background-position: center;
+}
+
+.hero h1 {
+    background: rgba(0,0,0,0.6);
+    padding: 10px;
+}
+
+/* HABERLER */
+.container {
+    padding: 20px;
+}
+
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.news-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.news-card:hover {
+    transform: scale(1.03);
+}
+
+.news-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.news-card .content {
+    padding: 15px;
+}
+
+.news-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.news-card p {
+    font-size: 14px;
+    color: #555;
+}
+
+/* FOOTER */
+footer {
+    background: #111;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 20px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="navbar">
+    <div class="logo">Orhan WEB</div>
+    <div class="menu">
+        <button onclick="getNews('gundem')">Gündem</button>
+        <button onclick="getNews('teknoloji')">Teknoloji</button>
+        <button onclick="getNews('spor')">Spor</button>
+    </div>
+</div>
+
+<div class="hero" id="hero">
+    <h1 id="heroTitle">Haberler yükleniyor...</h1>
+</div>
+
+<div class="container">
+    <h2>Son Haberler</h2>
+    <div class="news-grid" id="news"></div>
+</div>
+
+<footer>© 2026 Orhan WEB</footer>
+
+<script>
+function getRSS(category) {
+    if(category === "teknoloji")
+        return "https://www.trthaber.com/teknoloji.rss";
+    if(category === "spor")
+        return "https://www.trthaber.com/spor.rss";
+    return "https://www.trthaber.com/manset_articles.rss";
+}
+
+async function getNews(category="gundem") {
+    const rss = getRSS(category);
+    const url = `https://api.rss2json.com/v1/api.json?rss_url=${rss}`;
+
+    const res = await fetch(url);
+    const data = await res.json();
+
+    const newsContainer = document.getElementById("news");
+    const hero = document.getElementById("hero");
+    const heroTitle = document.getElementById("heroTitle");
+
+    newsContainer.innerHTML = "";
+
+    if(data.items.length > 0) {
+        hero.style.backgroundImage = `url(${data.items[0].thumbnail})`;
+        heroTitle.textContent = data.items[0].title;
+    }
+
+    data.items.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "news-card";
+
+        card.innerHTML = `
+            <img src="${item.thumbnail || 'https://via.placeholder.com/300'}">
+            <div class="content">
+                <h3>${item.title}</h3>
+                <p>${item.pubDate}</p>
+            </div>
+        `;
+
+        card.onclick = () => {
+            window.open(item.link, "_blank");
+        };
+
+        newsContainer.appendChild(card);
+    });
+}
+
+// SAYFA AÇILINCA
+getNews();
+</script>
+
+</body>
+</html>
