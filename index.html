@@ -86,6 +86,7 @@
       width: 100%;
       max-width: 500px;
       margin: 0 auto;
+      width: 400px;
     }
 
     input {
@@ -97,6 +98,26 @@
       font-size: 16px;
       box-sizing: border-box;
       background: white;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    #searchInput {
+     width: 100%;
+     padding: 10px 140px 10px 10px; /* sağa boşluk bıraktık */
+     font-size: 16px;
+    }
+
+    .powered {
+     position: absolute;
+     right: 10px;
+     top: 50%;
+     transform: translateY(-50%);
+     font-size: 12px;
+     color: #888;
+     pointer-events: none; /* tıklamayı engellemez */
     }
 
     button {
@@ -210,9 +231,12 @@
     <h1>Orhan <span>WEB</span>🇹🇷</h1>
 
     <div class="search-box">
-      <input type="text" id="searchInput" placeholder="🔍 Bir şey ara..." onkeyup="getSuggestions()" autocomplete="off"/>
-      <div id="suggestions"></div>
-    </div>
+  <div class="input-wrapper">
+    <input type="text" id="searchInput" placeholder="🔍 Bir şey ara..." onkeyup="getSuggestions()" autocomplete="off"/>
+    <span class="powered">Powered by Wikipedia</span>
+  </div>
+  <div id="suggestions"></div>
+</div>
     
     <button onclick="search()">Ara</button>
 
@@ -223,9 +247,8 @@
     <p>🔍 Orhan WEB</p>
     <p>Hızlı • Güvenli • Basit</p>
     <p>Bir Orhan Nuri Günay Ürünüdür</p>
-    <p><a href="index.html">Başlangıç</a></p>
-    <p><a href="ordinaryusmessengerv1.0setup.exe" download>Ordinaryus Messenger For Windows</a></p>
-    <p><a href="ordinaryusmessenger.dmg" download>Ordinaryus Messenger For macOS</a></p>
+    <a href="index.html">Başlangıç</a>
+    <a href="ordinaryusmessengerv1.0setup.exe" download>Ordinaryus Messenger For Windows</a>
   </footer>
 
   <script>
