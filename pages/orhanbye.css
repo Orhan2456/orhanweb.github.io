@@ -23,23 +23,22 @@ main {
     justify-content: space-around;
 }
 
-.service {
+/* Tüm hizmet bölümleri için %30 genişlik uygulandı */
+.service, .service3 {
     width: 30%;
     margin-bottom: 30px;
     text-align: center;
 }
 
-.service img {
-    max-width: 100%;
-    height: auto;
+/* Tüm resimlerin tamamen aynı boyutta ve kırpılmadan hizalı görünmesi sağlandı */
+.service img, .service3 img {
+    width: 100%;
+    height: 200px; /* İhtiyacınıza göre bu değeri artırıp azaltabilirsiniz */
+    object-fit: cover;
     border-radius: 8px;
 }
 
-.service h2 {
-    margin-top: 10px;
-}
-
-.service3 img {
+.service h2, .service3 h2 {
     margin-top: 10px;
 }
 
